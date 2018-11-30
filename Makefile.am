@@ -65,7 +65,7 @@ ccminer_SOURCES	= elist.h miner.h compat.h \
 			  sph/cubehash.c sph/echo.c sph/luffa.c sph/sha2.c sph/shavite.c sph/simd.c \
 			  sph/hamsi.c sph/hamsi_helper.c sph/streebog.c \
 			  sph/shabal.c sph/whirlpool.c sph/sha2big.c sph/haval.c \
-			  sph/ripemd.c sph/sph_sha2.c \
+			  sph/ripemd.c sph/sph_sha2.c sph/tiger.c \
 			  polytimos.cu \
 			  lbry/lbry.cu lbry/cuda_sha256_lbry.cu lbry/cuda_sha512_lbry.cu lbry/cuda_lbry_merged.cu \
 			  qubit/qubit.cu qubit/qubit_luffa512.cu qubit/deep.cu qubit/luffa.cu \
@@ -81,6 +81,7 @@ ccminer_SOURCES	= elist.h miner.h compat.h \
 			  x16/cuda_x16_shabal512.cu x16/cuda_x16_simd512_80.cu \
 			  x16/cuda_x16_echo512_64.cu \
 			  x17/x17.cu x17/hmq17.cu x17/sonoa.cu x17/cuda_x17_haval256.cu x17/cuda_x17_sha512.cu \
+              x21/x21s.cu x21/cuda_sha256_2.cu x21/cuda_tiger192.cu \
 			  phi/phi.cu phi/phi2.cu phi/cuda_phi2.cu phi/cuda_phi2_cubehash512.cu x11/cuda_streebog_maxwell.cu \
 			  x11/c11.cu x11/s3.cu x11/sib.cu x11/veltor.cu x11/cuda_streebog.cu
 

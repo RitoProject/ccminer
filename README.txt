@@ -134,6 +134,7 @@ its command line interface and options.
                           x16r        use to mine Raven
                           x16s        use to mine Pigeon and Eden
                           x17         use to mine X17
+                          x21s        use to mine Ritocoin
                           vanilla     use to mine Vanilla (Blake256)
                           veltor      use to mine VeltorCoin
                           whirlpool   use to mine Joincoin
