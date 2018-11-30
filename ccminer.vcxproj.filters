@@ -64,6 +64,9 @@
     <Filter Include="Source Files\CUDA\x17">
       <UniqueIdentifier>{85dfae6a-66ca-4332-8cec-98ee70cbdf2f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\CUDA\x21">
+      <UniqueIdentifier>{64ac22a6-f49f-11e8-a49f-e3788c43d09c}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\jansson">
       <UniqueIdentifier>{17b56151-79ec-4a32-bac3-9d94ae7f68fe}</UniqueIdentifier>
     </Filter>
@@ -226,6 +229,9 @@
       <Filter>Source Files\sph</Filter>
     </ClCompile>
     <ClCompile Include="sph\sph_sha2.c">
+      <Filter>Source Files\sph</Filter>
+    </ClCompile>
+    <ClCompile Include="sph\tiger.c">
       <Filter>Source Files\sph</Filter>
     </ClCompile>
     <ClCompile Include="sph\sha2big.c">
@@ -471,6 +477,9 @@
       <Filter>Header Files\sph</Filter>
     </ClInclude>
     <ClInclude Include="sph\sph_sha2.h">
+      <Filter>Header Files\sph</Filter>
+    </ClInclude>
+    <ClInclude Include="sph\sph_tiger.h">
       <Filter>Header Files\sph</Filter>
     </ClInclude>
     <ClInclude Include="compat\winansi.h">
@@ -1023,6 +1032,15 @@
     </CudaCompile>
     <CudaCompile Include="x16\x16s.cu">
       <Filter>Source Files\CUDA\x16</Filter>
+    </CudaCompile>
+    <CudaCompile Include="x21\x21s.cu">
+      <Filter>Source Files\CUDA\x21</Filter>
+    </CudaCompile>
+    <CudaCompile Include="x21\cuda_sha256_2.cu">
+      <Filter>Source Files\CUDA\x21</Filter>
+    </CudaCompile>
+    <CudaCompile Include="x21\cuda_tiger192.cu">
+      <Filter>Source Files\CUDA\x21</Filter>
     </CudaCompile>
   </ItemGroup>
   <ItemGroup>
