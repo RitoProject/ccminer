@@ -306,6 +306,7 @@ Options:\n\
 			x16r        X16R (Raven)\n\
 			x16s        X16S\n\
 			x17         X17\n\
+			x21s        X21S (Ritocoin)\n\
 			wildkeccak  Boolberry\n\
 			zr5         ZR5 (ZiftrCoin)\n\
   -d, --devices         Comma separated list of CUDA devices to use.\n\
@@ -1744,6 +1745,7 @@ static bool stratum_gen_work(struct stratum_ctx *sctx, struct work *work)
 		case ALGO_BITCORE:
 		case ALGO_X16R:
 		case ALGO_X16S:
+		case ALGO_X21S:
 			work_set_target(work, sctx->job.diff / (256.0 * opt_difficulty));
 			break;
 		case ALGO_KECCAK:
@@ -2564,6 +2566,9 @@ static void *miner_thread(void *userdata)
 			break;
 		case ALGO_X16S:
 			rc = scanhash_x16s(thr_id, &work, max_nonce, &hashes_done);
+			break;
+		case ALGO_X21S:
+			rc = scanhash_x21s(thr_id, &work, max_nonce, &hashes_done);
 			break;
 		case ALGO_X17:
 			rc = scanhash_x17(thr_id, &work, max_nonce, &hashes_done);

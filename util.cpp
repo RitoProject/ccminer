@@ -2354,6 +2354,9 @@ void print_hash_tests(void)
 	x17hash(&hash[0], &buf[0]);
 	printpfx("x17", hash);
 
+	x21s_hash(&hash[0], &buf[0]);
+	printpfx("x21s", hash);
+
 	//memcpy(buf, zrtest, 80);
 	zr5hash(&hash[0], &buf[0]);
 	//zr5hash_pok(&hash[0], (uint32_t*) &buf[0]);
