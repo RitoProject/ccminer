@@ -304,6 +304,7 @@ Options:\n\
 			x14         X14\n\
 			x15         X15\n\
 			x16r        X16R (Raven)\n\
+            x16rv2      X16Rv2 (Raven)\n\
 			x16s        X16S\n\
 			x17         X17\n\
 			x21s        X21S (Ritocoin)\n\
@@ -1744,6 +1745,7 @@ static bool stratum_gen_work(struct stratum_ctx *sctx, struct work *work)
 		case ALGO_TIMETRAVEL:
 		case ALGO_BITCORE:
 		case ALGO_X16R:
+        case ALGO_X16RV2:
 		case ALGO_X16S:
 		case ALGO_X21S:
 			work_set_target(work, sctx->job.diff / (256.0 * opt_difficulty));
@@ -2564,6 +2566,9 @@ static void *miner_thread(void *userdata)
 		case ALGO_X16R:
 			rc = scanhash_x16r(thr_id, &work, max_nonce, &hashes_done);
 			break;
+        case ALGO_X16RV2:
+            rc = scanhash_x16rv2(thr_id, &work, max_nonce, &hashes_done);
+            break;
 		case ALGO_X16S:
 			rc = scanhash_x16s(thr_id, &work, max_nonce, &hashes_done);
 			break;

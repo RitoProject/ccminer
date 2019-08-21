@@ -652,7 +652,7 @@ __constant__ const uint64_t T4[256] = {
 	}
 
 
-__global__ void __launch_bounds__(256,5) tiger192_gpu_hash_64(int threads, uint32_t *d_hash)
+__global__ void __launch_bounds__(256,5) tiger192_gpu_hash_64(int threads, int zero_pad_64, uint32_t *d_hash)
 {
 	__shared__ uint64_t sharedMem[768];
 //	if(threadIdx.x < 256)
@@ -685,14 +685,77 @@ __global__ void __launch_bounds__(256,5) tiger192_gpu_hash_64(int threads, uint3
 
 		#pragma unroll
 		for (int i = 0; i < 3; i++) inout[i] = buf[i];
+		if (zero_pad_64)
+        {
+            #pragma unroll
+            for (int i = 3; i < 8; i++) inout[i] = 0;
+        }
 	}
 }
 
+__constant__ uint64_t c_PaddedMessage80[10];
 
-__host__ void tiger192_cpu_hash_64(int thr_id, int threads, uint32_t *d_hash)
+__global__ void __launch_bounds__(256,5) tiger192_gpu_hash_80(int threads, uint32_t startNonce, uint32_t *d_hash)
+{
+	__shared__ uint64_t sharedMem[768];
+//	if(threadIdx.x < 256)
+	{
+		sharedMem[threadIdx.x]      = T1[threadIdx.x];
+		sharedMem[threadIdx.x+256]  = T2[threadIdx.x];
+		sharedMem[threadIdx.x+512]  = T3[threadIdx.x];
+		//sharedMem[threadIdx.x+768]  = T4[threadIdx.x];
+	}
+	__syncthreads();
+
+  int thread = (blockDim.x * blockIdx.x + threadIdx.x);
+  if (thread < threads) {
+		uint64_t* out = (uint64_t*)&d_hash[thread<<4];
+		uint64_t buf[3], in[8], in2[8];
+
+        const uint32_t nonce = cuda_swab32(startNonce + thread);
+
+		#pragma unroll
+		for (int i = 0; i < 8; i++) in[i] = c_PaddedMessage80[i];
+
+		#pragma unroll
+		for (int i = 0; i < 3; i++) buf[i] = III[i];
+
+        TIGER_ROUND_BODY(in, buf);
+
+		in2[0] = c_PaddedMessage80[8];
+		in2[1] = (((uint64_t) nonce) << 32) | (c_PaddedMessage80[9] & 0xffffffff);
+        in2[2] = 1;
+        #pragma unroll
+        for (int i = 3; i < 7; i++) in2[i] = 0;
+		in2[7] = 0x280;
+
+		TIGER_ROUND_BODY(in2, buf);
+
+		#pragma unroll
+		for (int i = 0; i < 3; i++) out[i] = buf[i];
+		#pragma unroll
+		for (int i = 3; i < 8; i++) out[i] = 0;
+  }
+}
+
+__host__ void tiger192_cpu_hash_64(int thr_id, int threads, int zero_pad_64, uint32_t *d_hash)
 {
 	const int threadsperblock = 256;
 	dim3 grid(threads/threadsperblock);
 	dim3 block(threadsperblock);
-	tiger192_gpu_hash_64<<<grid, block>>>(threads, d_hash);
+	tiger192_gpu_hash_64<<<grid, block>>>(threads, zero_pad_64, d_hash);
+}
+
+__host__
+void tiger192_setBlock_80(void *pdata)
+{
+    cudaMemcpyToSymbol(c_PaddedMessage80, pdata, sizeof(c_PaddedMessage80), 0, cudaMemcpyHostToDevice);
+}
+
+__host__ void tiger192_cpu_hash_80(int thr_id, int threads, uint32_t startNonce, uint32_t *d_hash)
+{
+	const int threadsperblock = 256;
+	dim3 grid(threads/threadsperblock);
+	dim3 block(threadsperblock);
+	tiger192_gpu_hash_80<<<grid, block>>>(threads, startNonce, d_hash);
 }
